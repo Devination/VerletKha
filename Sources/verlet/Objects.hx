@@ -12,12 +12,16 @@ class Point {
 }
 
 class LineSegments {
-	public function new(vertices:Array<Vector2>, stiffness:Float) {
+	public function new(vertices:Array<Vector2>, stiffness:Float, pinSegments:Array<Int>) {
 		var composite = new Composite();
 		for (i in 0...vertices.length) {
-			composite.particles.push(new Particle(vertices[i]));
+			var p = new Particle(vertices[i]);
+			composite.particles.push(p);
 			if (i > 0) {
 				composite.constraints.push(new DistanceConstraint(composite.particles[i], composite.particles[i - 1], stiffness));
+			}
+			if (pinSegments.indexOf(i) != -1) {
+				composite.Pin(p, vertices[i]);
 			}
 		}
 		Verlet.Instance.composites.push(composite);
