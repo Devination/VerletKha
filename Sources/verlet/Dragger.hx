@@ -5,6 +5,9 @@ import kha.input.Mouse;
 import kha.math.Vector2;
 import verlet.Verlet.Particle;
 import verlet.Verlet.Composite;
+import verlet.Verlet.IPlaceable;
+import verlet.Constraint.PinConstraint;
+import Type.getClass;
 
 using verlet.Vector2Extensions;
 
@@ -15,7 +18,7 @@ class Dragger {
 	// Mouse Dragging Vars
 	public var mouse(get, null) = new Vector2(0,0);
 	public function get_mouse() {return mouse;}
-	public var draggedEntity(get, null):Particle = null;
+	public var draggedEntity(get, null):IPlaceable = null;
 	public function get_draggedEntity() {return draggedEntity;}
 	
 	private var selectionRadius = 20;
@@ -34,10 +37,10 @@ class Dragger {
 	}
 	
 	// Handle Dragging
-	public function nearestEntity():Particle {
+	public function nearestEntity():IPlaceable {
 		var d2Nearest = 0.0;
-		var entity:Particle = null;
-		var constraintsNearest = null;
+		var entity:IPlaceable = null;
+		var constraintsNearest:Array<Constraint> = [];
 		
 		// find nearest point
 		for (c in world.composites) {
@@ -52,13 +55,14 @@ class Dragger {
 			}
 		}
 		
-		// TODO: search for pinned constraints for this entity. Or maybe give Particles a reference to their Constraint(s)?
-		// for (c in constraintsNearest)
-		// 	if (getClass(c) == PinConstraint)
-		// 	{
-		// 		if (cast(c, PinConstraint).a == entity)
-		// 			entity = cast(c, ISelectable);
-		// 	}
+		for (c in constraintsNearest)
+		{
+			if (getClass(c) == PinConstraint)
+			{
+				if (cast(c, PinConstraint).a == entity)
+					entity = cast(c, IPlaceable);
+			}
+		}
 		
 		return entity;
 	}
@@ -68,6 +72,7 @@ class Dragger {
 	}
 	
 	function onMouseUp(button:Int, x:Int, y:Int):Void {
+		this.draggedEntity.pos = new Vector2(x, y); //stamp down as new value or else Pins will stick to mouse
 		this.draggedEntity = null;
 	}
 	

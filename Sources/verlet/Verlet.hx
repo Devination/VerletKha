@@ -88,7 +88,11 @@ class Composite {
 	}
 }
 
-class Particle {
+interface IPlaceable {
+	public var pos:Vector2;
+}
+
+class Particle implements IPlaceable {
 	public var pos:Vector2;
 	public var lastPos:Vector2;
 

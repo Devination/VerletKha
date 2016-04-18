@@ -29,4 +29,4 @@ TODO
 
 License
 -------
-You may use verlet-js under the terms of the MIT License (See [LICENSE](LICENSE)).
+You may use VerletKha under the terms of the MIT License (See [LICENSE](LICENSE)).

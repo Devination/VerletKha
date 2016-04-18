@@ -5,6 +5,7 @@ import verlet.Verlet.Particle;
 import kha.math.Vector2;
 import kha.Color;
 import kha.graphics2.Graphics;
+import verlet.Verlet.IPlaceable;
 using kha.graphics2.GraphicsExtension;
 
 class Renderer {
@@ -47,7 +48,7 @@ class Renderer {
 		graphics.color = Color.White;
 		
 		// Highlight the nearest entity within the selection radius
-		var entity:Particle = dragger.nearestEntity();
+		var entity:IPlaceable = dragger.nearestEntity();
 		if(entity != null) {
 			graphics.drawCircle(entity.pos.x, entity.pos.y, 8);
 		}

@@ -1,5 +1,6 @@
 package verlet;
 import verlet.Verlet.Particle;
+import verlet.Verlet.IPlaceable;
 import kha.math.Vector2;
 using verlet.Vector2Extensions;
 
@@ -49,7 +50,7 @@ class DistanceConstraint extends Constraint {
 	}
 }
 
-class PinConstraint extends Constraint {
+class PinConstraint extends Constraint implements IPlaceable {
 	public var a:Particle;
 	public var pos:Vector2;
 	
