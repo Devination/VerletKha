@@ -6,14 +6,19 @@ import kha.math.Vector2;
 import kha.Color;
 import kha.graphics2.Graphics;
 import verlet.Verlet.IPlaceable;
+import verlet.collision.Collision;
+import verlet.collision.Shapes.Circle;
+import Type.getClass;
 using kha.graphics2.GraphicsExtension;
 
 class Renderer {
 	var world:Verlet = Verlet.Instance;
+	var collision:Collision = Collision.Instance;
 	var dragger:Dragger = Dragger.Instance;
 	
 	public var particleColor:Color = Color.fromBytes(220, 52, 94);
 	public var constraintColor:Color = Color.fromBytes(67, 62, 54);
+	public var shapeColor:Color = Color.fromBytes(67, 62, 54);
 	
 	public static var Instance(get, null):Renderer = null;
 	private static function get_Instance():Renderer {
@@ -41,6 +46,15 @@ class Renderer {
 			graphics.color = particleColor;
 			for (p in composite.particles) {
 				graphics.fillCircle(p.pos.x, p.pos.y, 2.5);
+			}
+		}
+		
+		graphics.color = shapeColor;
+		for (s in collision.shapes) {
+			// TODO: Deal with other Shapes
+			if (getClass(s) == Circle) {
+				var circle = cast(s, Circle);
+				graphics.drawCircle(circle.pos.x, circle.pos.y, circle.radius);
 			}
 		}
 		

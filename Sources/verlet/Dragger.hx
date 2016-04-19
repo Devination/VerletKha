@@ -7,6 +7,8 @@ import verlet.Verlet.Particle;
 import verlet.Verlet.Composite;
 import verlet.Verlet.IPlaceable;
 import verlet.Constraint.PinConstraint;
+import verlet.collision.Collision;
+import verlet.collision.Shapes.Shape;
 import Type.getClass;
 
 using verlet.Vector2Extensions;
@@ -14,6 +16,7 @@ using verlet.Vector2Extensions;
 class Dragger {
 	
 	var world:Verlet = Verlet.Instance;
+	var collision:Collision = Collision.Instance;
 	
 	// Mouse Dragging Vars
 	public var mouse(get, null) = new Vector2(0,0);
@@ -38,7 +41,7 @@ class Dragger {
 	
 	// Handle Dragging
 	public function nearestEntity():IPlaceable {
-		var d2Nearest = 0.0;
+		var d2Nearest = 64.0;
 		var entity:IPlaceable = null;
 		var constraintsNearest:Array<Constraint> = [];
 		
@@ -55,12 +58,22 @@ class Dragger {
 			}
 		}
 		
-		for (c in constraintsNearest)
-		{
+		for (c in constraintsNearest)	{
 			if (getClass(c) == PinConstraint)
 			{
 				if (cast(c, PinConstraint).a == entity)
 					entity = cast(c, IPlaceable);
+			}
+		}
+		
+		// TODO: Allow dragging from anywhere within the the Shape
+		if (entity == null) {
+			for (s in collision.shapes) {
+				var d2 = s.pos.distanceTo(this.mouse);
+				if (d2 <= this.selectionRadius && d2 < d2Nearest) {
+					entity = s;
+					d2Nearest = d2;
+				}
 			}
 		}
 		
@@ -72,7 +85,8 @@ class Dragger {
 	}
 	
 	function onMouseUp(button:Int, x:Int, y:Int):Void {
-		this.draggedEntity.pos = new Vector2(x, y); //stamp down as new value or else Pins will stick to mouse
+		if (this.draggedEntity != null)
+			this.draggedEntity.pos = new Vector2(x, y); //stamp down as new value or else Pins will stick to mouse
 		this.draggedEntity = null;
 	}
 	

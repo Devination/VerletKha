@@ -25,6 +25,10 @@ class Vector2Extensions {
 		return Math.abs(v1.sub(v2).length);
 	}
 	
+	public static inline function vectorTo(v1:Vector2, v2:Vector2):Vector2 {
+		return new Vector2(v1.x - v2.x, v1.y - v2.y);
+	}
+	
 	public static inline function rotate(v:Vector2, origin:Vector2, amount:Float) {
 		var x = v.x - origin.x;
 		var y = v.y - origin.y;

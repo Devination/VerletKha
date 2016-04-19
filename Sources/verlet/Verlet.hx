@@ -2,10 +2,12 @@ package verlet;
 
 import kha.math.Vector2;
 import verlet.Constraint.PinConstraint;
+import verlet.collision.Collision;
 
 class Verlet {
 	public static var Instance(get, null):Verlet;
 	private static function get_Instance(): Verlet { return Instance; }
+	private var collision:Collision = Collision.Instance;
 	
 	// simulation params
 	public var gravity = new Vector2(0, 0.2);
@@ -47,6 +49,8 @@ class Verlet {
 
 				if (p.pos.x > this.width)
 					p.pos.x = this.width;
+				
+				collision.checkCollision(c);
 			}
 			
 			// relax constraints
