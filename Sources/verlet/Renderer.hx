@@ -7,7 +7,7 @@ import kha.Color;
 import kha.graphics2.Graphics;
 import verlet.Verlet.IPlaceable;
 import verlet.collision.Collision;
-import verlet.collision.Shapes.Circle;
+import verlet.collision.Shapes;
 import Type.getClass;
 using kha.graphics2.GraphicsExtension;
 
@@ -51,10 +51,15 @@ class Renderer {
 		
 		graphics.color = shapeColor;
 		for (s in collision.shapes) {
-			// TODO: Deal with other Shapes
-			if (getClass(s) == Circle) {
+			switch (getClass(s)) {
+				case Circle:
 				var circle = cast(s, Circle);
 				graphics.drawCircle(circle.pos.x, circle.pos.y, circle.radius);
+				continue;
+				case Box:
+				var box = cast(s, Box);
+				graphics.drawRect(box.pos.x, box.pos.y, box.width, box.height);
+				continue;
 			}
 		}
 		

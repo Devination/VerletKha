@@ -35,3 +35,41 @@ class Circle extends Shape {
 		}
 	}
 }
+
+class Box extends Shape {
+	public var width:Float;
+	public var height:Float;
+	public function new(pos:Vector2, width:Float, height:Float) { super();
+		this.pos = pos;
+		this.width = width;
+		this.height = height;
+	}
+	
+	public override function checkParticleCollision(particles:Array<Particle>):Void {
+		for (p in particles) {
+			
+			// check if inside box
+			if (p.pos.x > pos.x && p.pos.x < pos.x + width && // overlap x
+				p.pos.y > pos.y && p.pos.y < pos.y + height) { // overlap y
+				
+				// find shortest distance to edge
+				var distances:Array<Float> = [
+					pos.x - p.pos.x, // to left
+					pos.x - p.pos.x + width, // to right
+					pos.y - p.pos.y, // to top
+					pos.y - p.pos.y + height// to bottom
+				];
+				var shortest:Int = 0;
+				for (i in 0...4) {
+					if (Math.abs(distances[i]) < Math.abs(distances[shortest]))
+						shortest = i;
+				}
+				// push towards that edge
+				if(shortest < 2)
+					p.pos.x += distances[shortest];
+				else
+					p.pos.y += distances[shortest];
+			}
+		}
+	}
+}
