@@ -19,6 +19,7 @@ class Renderer {
 	public var particleColor:Color = Color.fromBytes(220, 52, 94);
 	public var constraintColor:Color = Color.fromBytes(67, 62, 54);
 	public var shapeColor:Color = Color.fromBytes(67, 62, 54);
+	public var highlightNearest:Bool = true;
 	
 	public static var Instance(get, null):Renderer = null;
 	private static function get_Instance():Renderer {
@@ -66,10 +67,12 @@ class Renderer {
 		// Reset color back to default white
 		graphics.color = Color.White;
 		
-		// Highlight the nearest entity within the selection radius
-		var entity:IPlaceable = dragger.nearestEntity();
-		if(entity != null) {
-			graphics.drawCircle(entity.pos.x, entity.pos.y, 8);
+		if (highlightNearest) {
+			// Highlight the nearest entity within the selection radius
+			var entity:IPlaceable = dragger.nearestEntity();
+			if(entity != null) {
+				graphics.drawCircle(entity.pos.x, entity.pos.y, 8);
+			}
 		}
 	}
 }
