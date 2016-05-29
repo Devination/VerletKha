@@ -7,7 +7,7 @@ import verlet.Verlet.Composite;
 import verlet.Verlet.IPlaceable;
 import verlet.Constraint.PinConstraint;
 import verlet.collision.Collision;
-import verlet.collision.Shapes.Shape;
+import verlet.collision.Colliders.Collider;
 import Type.getClass;
 
 using verlet.Vector2Extensions;
@@ -63,9 +63,9 @@ class Dragger {
 			}
 		}
 		
-		// TODO: Allow dragging from anywhere within the the Shape
+		// TODO: Allow dragging from anywhere within the the Collider
 		if (entity == null) {
-			for (s in collision.shapes) {
+			for (s in collision.colliders) {
 				var d2 = s.pos.distanceTo(this.mouse);
 				if (d2 <= this.selectionRadius && d2 < d2Nearest) {
 					entity = s;

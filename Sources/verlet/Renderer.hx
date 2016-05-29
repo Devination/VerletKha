@@ -7,7 +7,7 @@ import kha.Color;
 import kha.graphics2.Graphics;
 import verlet.Verlet.IPlaceable;
 import verlet.collision.Collision;
-import verlet.collision.Shapes;
+import verlet.collision.Colliders.Collider;
 import Type.getClass;
 using kha.graphics2.GraphicsExtension;
 
@@ -33,8 +33,8 @@ class Renderer {
 			composite.render(graphics);
 		}
 		
-		for (shape in collision.shapes) {
-			shape.render(graphics);
+		for (collider in collision.colliders) {
+			collider.render(graphics);
 		}
 		
 		// Reset color back to default white

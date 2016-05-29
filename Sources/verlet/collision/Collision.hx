@@ -5,12 +5,12 @@ import verlet.Verlet.Particle;
 import kha.math.Vector2;
 import verlet.Verlet.IPlaceable;
 import verlet.Verlet.Composite;
-import verlet.collision.Shapes.Shape;
+import verlet.collision.Colliders.Collider;
 
 class Collision {
 	var world:Verlet = Verlet.Instance;
 	
-	public var shapes:Array<Shape> = new Array<Shape>();
+	public var colliders:Array<Collider> = new Array<Collider>();
 	
 	public static var Instance(get, null):Collision = null;
 	private static function get_Instance():Collision {
@@ -25,7 +25,7 @@ class Collision {
 	}
 	
 	public function checkCollision(c:Composite) {
-		for (s in shapes) {
+		for (s in colliders) {
 			s.checkParticleCollision(c.particles);
 		}
 	}
