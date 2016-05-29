@@ -1,11 +1,17 @@
 package verlet.collision;
 
+import kha.graphics2.Graphics;
+import verlet.Renderer.IRenderable;
+import kha.Color;
+using kha.graphics2.GraphicsExtension;
+
 import verlet.Verlet.Particle;
 import verlet.Verlet.IPlaceable;
 import kha.math.Vector2;
 using verlet.Vector2Extensions;
 
-class Shape implements IPlaceable {
+class Shape implements IPlaceable implements IRenderable {
+	public var shapeColor:Color = Color.fromBytes(67, 62, 54);
 	public var pos:Vector2;
 	var coll = Collision.Instance;
 	
@@ -14,6 +20,7 @@ class Shape implements IPlaceable {
 	}
 	
 	public function checkParticleCollision(particles:Array<Particle>):Void {}
+	public function render(graphics : Graphics):Void {}
 }
 
 class Circle extends Shape {
@@ -33,6 +40,11 @@ class Circle extends Shape {
 				p.pos = p.pos.add(normal.mult(overlap));
 			}
 		}
+	}
+	
+	public override function render(graphics : Graphics):Void {
+		graphics.color = shapeColor;
+		graphics.drawCircle(pos.x, pos.y, radius);
 	}
 }
 
@@ -71,5 +83,10 @@ class Box extends Shape {
 					p.pos.y += distances[shortest];
 			}
 		}
+	}
+	
+	public override function render(graphics : Graphics):Void {
+		graphics.color = shapeColor;
+		graphics.drawRect(pos.x, pos.y, width, height);
 	}
 }

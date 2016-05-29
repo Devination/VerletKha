@@ -58,8 +58,10 @@ class Cloth {
 }
 
 class Tire {
+	public var composite(default, null):Composite;
+	
 	public function new(origin:Vector2, radius:Float, segments:Int, ?spokeStiffness:Float = 1, ?treadStiffness:Float = 1) {
-		var composite = new Composite();
+		composite = new Composite();
 		var stride = 2 * Math.PI / segments;
 		
 		// particles

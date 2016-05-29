@@ -1,6 +1,5 @@
 package verlet;
 
-import kha.graphics2.Graphics;
 import kha.input.Mouse;
 import kha.math.Vector2;
 import verlet.Verlet.Particle;
@@ -19,12 +18,10 @@ class Dragger {
 	var collision:Collision = Collision.Instance;
 	
 	// Mouse Dragging Vars
-	public var mouse(get, null) = new Vector2(0,0);
-	public function get_mouse() {return mouse;}
-	public var draggedEntity(get, null):IPlaceable = null;
-	public function get_draggedEntity() {return draggedEntity;}
+	public var mouse(default, null) = new Vector2(0,0);
+	public var draggedEntity(default, null):IPlaceable = null;
 	
-	private var selectionRadius = 20;
+	public var selectionRadius = 20;
 	
 	public static var Instance(get, null):Dragger = null;
 	private static function get_Instance():Dragger {
