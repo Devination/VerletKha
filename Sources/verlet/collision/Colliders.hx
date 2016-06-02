@@ -90,3 +90,143 @@ class Box extends Collider {
 		graphics.drawRect(pos.x, pos.y, width, height);
 	}
 }
+
+/** Only works for convex polygons.
+	Verts must be in local space relative to position.
+	Polygon is constructed clockwise with normals facing out
+	or counter clockwise for normals facing in */
+class Polygon extends Collider {
+	public var verts(default, null):Array<Vector2>;
+	public var edges(default, null):Array<Edge>;
+	public var renderNormals:Bool = false;
+	var localBoundsMin:Vector2;
+	var localBoundsMax:Vector2;
+	
+	public function new(pos:Vector2, verts:Array<Vector2>) { super();
+		this.pos = pos;
+		this.verts = verts;
+		this.edges = [];
+		
+		// Get bounds and create edges from verts
+		var minX = verts[0].x;
+		var minY = verts[0].y;
+		var maxX = verts[0].x;
+		var maxY = verts[0].y;
+		for (i in 1...verts.length) {
+			edges.push(new Edge(verts[i-1], verts[i], this));
+			if (verts[i].x < minX) {minX = verts[i].x;}
+			if (verts[i].y < minY) {minY = verts[i].y;}
+			if (verts[i].x > maxX) {maxX = verts[i].x;}
+			if (verts[i].y > maxY) {maxY = verts[i].y;}
+		}
+		edges.push(new Edge(verts[verts.length-1], verts[0], this));
+		this.localBoundsMin = new Vector2(minX, minY);
+		this.localBoundsMax = new Vector2(maxX, maxY);
+	}
+	
+	public inline function getVertsWorldSpace():Array<Vector2> {
+		return Lambda.array(Lambda.map(verts, function(v) { return v.add(pos); }));
+	}
+	
+	public override function checkParticleCollision(particles:Array<Particle>):Void {
+		for (p in particles) {
+			if (containsPoint(p.pos)) {
+				var closestDist = Math.POSITIVE_INFINITY;
+				var closestEdge:Edge = null;
+				for (e in edges) {
+					// Find which edge is closest and push the particle along it's normal
+					var dist:Float = p.pos.distanceTo(e.getClosestPointOnEdgeFromPoint(p.pos));
+					if (dist < closestDist) {
+						closestDist = dist;
+						closestEdge = e;
+					}
+				}
+				// push towards that edge
+				p.pos = p.pos.add(closestEdge.normal);
+			}
+		}
+	}
+	
+	public function isInBounds(p:Vector2):Bool {
+		// check if inside box
+		if (p.x > this.localBoundsMin.x + pos.x && p.x < this.localBoundsMax.x + pos.x && // overlap x
+			p.y > this.localBoundsMin.y + pos.y && p.y < this.localBoundsMax.y + pos.y) { // overlap y
+				return true;
+		}
+		return false;
+	}
+	
+	public function containsPoint(point:Vector2):Bool {
+		var vertsWS:Array<Vector2> = getVertsWorldSpace();
+		var j:Int = vertsWS.length - 1;
+		var inside:Bool = false;
+		for (i in 0...vertsWS.length) {
+			if (vertsWS[i].y < point.y && vertsWS[j].y >= point.y || vertsWS[j].y < point.y && vertsWS[i].y >= point.y) {
+				if (vertsWS[i].x + (point.y - vertsWS[i].y) / (vertsWS[j].y - vertsWS[i].y) * (vertsWS[j].x - vertsWS[i].x) < point.x) {
+					inside = !inside;
+				}
+			}
+			j = i;
+		}
+		return inside;
+	}
+	
+	public override function render(graphics : Graphics):Void {
+		graphics.color = colliderColor;
+		graphics.drawPolygon(pos.x, pos.y, verts);
+		
+		if (renderNormals) {
+			for (edge in edges) {
+				edge.renderNormal(graphics);
+			}
+		}
+	}
+}
+
+// Edge should be used only through Polygon for collisions
+class Edge {
+	public var vert0:Vector2;
+	public var vert1:Vector2;
+	public var normal(default, null):Vector2;
+	var parent:Polygon;
+	
+	public var normalColor:Color = Color.Red;
+	public var normalLength:Int = 32;
+	
+	public function new(vert0:Vector2, vert1:Vector2, parent:Polygon) {
+		this.vert0 = vert0;
+		this.vert1 = vert1;
+		this.parent = parent;
+		this.normal = new Vector2(0,0);
+		updateNormal();
+	}
+
+	// Need to call if relative vert positions change
+	public function updateNormal() {
+		var delta = vert1.sub(vert0);
+		normal.x = delta.y;
+		normal.y = -delta.x;
+		normal.normalize();
+	}
+	
+	public function getClosestPointOnEdgeFromPoint(point:Vector2):Vector2 {
+		var v0 = vert0.add(parent.pos);
+		var v1 = vert1.add(parent.pos);
+		var dot = point.sub(v1).dot(v0.sub(v1)) / v0.sub(v1).dot(v0.sub(v1));
+		
+		// Clamp to line segment
+		if (dot < 0)
+			dot = 0;
+		else if (dot > 1)
+			dot = 1;
+			
+		var intersection:Vector2 = v0.mult(dot).add(v1.mult(1 - dot));
+		return intersection;
+	}
+	
+	public function renderNormal(graphics : Graphics) {
+		graphics.color = normalColor;
+		var midPoint = vert1.add(parent.pos).add(vert0).add(parent.pos).mult(0.5);
+		graphics.drawLine(midPoint.x, midPoint.y, midPoint.x + (normal.x * normalLength), midPoint.y + (normal.y * normalLength));
+	}
+}
