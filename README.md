@@ -19,14 +19,15 @@ Documentation forthcoming. In the mean time, check out the Demos and their sourc
 
 Demos
 --------
+All demos and preview gifs can be found [here](http://www.devination.com/p/verletkha.html)
+
 1. [Shapes (VerletKha Hello world)](http://www.devination.com/p/verletkha-shapes.html) - [Source Code](https://github.com/Devination/VerletKha-Examples/tree/master/Shapes)
-2. [Collision Primitives](http://www.devination.com/2016/04/verletkha-collision-primitives.html) - [Source Code](https://github.com/Devination/VerletKha-Examples/tree/master/Collision)
+2. [Primitive Colliders](http://www.devination.com/2016/04/verletkha-collision-primitives.html) - [Source Code](https://github.com/Devination/VerletKha-Examples/tree/master/Collision)
+3. [Polygon Colliders](http://www.devination.com/2016/06/verletkha-polygon-colliders.html) - [Source Code](https://github.com/Devination/VerletKha-Examples/tree/master/PolygonCollision)
 
 TODO
 -------
-1. Documentation
-2. Collision Shapes
-3. [Other things that'd be nice to have](https://trello.com/b/Uh63UCJi/verletkha)
+Check out the list on [Trello](https://trello.com/b/Uh63UCJi/verletkha)
 
 License
 -------
