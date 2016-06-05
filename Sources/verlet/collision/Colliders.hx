@@ -13,6 +13,9 @@ using verlet.Vector2Extensions;
 class Collider implements IPlaceable implements IRenderable {
 	public var colliderColor:Color = Color.fromBytes(67, 62, 54);
 	public var pos:Vector2;
+	// Make it a force volume with non-1 strength values.
+	// Should be either 1 or super tiny values like 0.0001 
+	public var strength:Float = 1; 
 	var coll = Collision.Instance;
 	
 	public function new() {
@@ -37,7 +40,7 @@ class Circle extends Collider {
 				var overlap:Float = radius - distance;
 				var normal:Vector2 = p.pos.vectorTo(pos);
 				normal.normalize();
-				p.pos = p.pos.add(normal.mult(overlap));
+				p.pos = p.pos.add(normal.mult(overlap * strength));
 			}
 		}
 	}
@@ -78,9 +81,9 @@ class Box extends Collider {
 				}
 				// push towards that edge
 				if(shortest < 2)
-					p.pos.x += distances[shortest];
+					p.pos.x += distances[shortest] * strength;
 				else
-					p.pos.y += distances[shortest];
+					p.pos.y += distances[shortest] * strength;
 			}
 		}
 	}
@@ -142,7 +145,7 @@ class Polygon extends Collider {
 					}
 				}
 				// push towards that edge
-				p.pos = p.pos.add(closestEdge.normal);
+				p.pos = p.pos.add(closestEdge.normal.mult(strength));
 			}
 		}
 	}

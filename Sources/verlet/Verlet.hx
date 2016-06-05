@@ -23,13 +23,15 @@ class Verlet {
 	// Bounds of the Verlet World. Entities will stop here
 	private var width:Float;
 	private var height:Float;
+	private var ceiling:Bool;
 	
 	// Handle Dragging
 	var dragger:Dragger;
 
-	public function new(width:Float, height:Float) {
+	public function new(width:Float, height:Float, ?ceiling:Bool = false) {
 		this.width = width;
 		this.height = height;
+		this.ceiling = ceiling;
 		Instance = this;
 		dragger = Dragger.Instance;
 	}
@@ -47,11 +49,12 @@ class Verlet {
 				// stop at bounds
 				if (p.pos.y > this.height)
 					p.pos.y = this.height;
+				else if (ceiling && p.pos.y < 0)
+					p.pos.y = 0;
 				
 				if (p.pos.x < 0)
 					p.pos.x = 0;
-
-				if (p.pos.x > this.width)
+				else if (p.pos.x > this.width)
 					p.pos.x = this.width;
 				
 				collision.checkCollision(c);
