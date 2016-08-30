@@ -21,19 +21,23 @@ class Verlet {
 	public var composites:Array<Composite> = new Array<Composite>();
 	
 	// Bounds of the Verlet World. Entities will stop here
-	private var width:Float;
-	private var height:Float;
+	private var width:Int;
+	private var height:Int;
 	private var ceiling:Bool;
 	
+	#if !noDragger
 	// Handle Dragging
 	var dragger:Dragger;
+	#end
 
-	public function new(width:Float, height:Float, ?ceiling:Bool = false) {
+	public function new(width:Int, height:Int, ?ceiling:Bool = false) {
 		this.width = width;
 		this.height = height;
 		this.ceiling = ceiling;
 		Instance = this;
+		#if !noDragger
 		dragger = Dragger.Instance;
+		#end
 	}
 	
 	public function update(step:Int) {
@@ -68,9 +72,11 @@ class Verlet {
 				}
 			}
 		}
+		#if !noDragger
 		// handle dragging of entities
 		if (dragger.draggedEntity != null)
 			dragger.draggedEntity.pos = dragger.mouse;
+		#end
 	}
 }
 

@@ -1,3 +1,6 @@
+//If you don't want to be able to drag entities add this to your khafile.js and it will be removed at compile time:
+//project.addDefine('noDragger');
+#if !noDragger
 package verlet;
 
 import kha.input.Mouse;
@@ -92,3 +95,4 @@ class Dragger {
 		this.mouse.y = y;
 	}
 }
+#end

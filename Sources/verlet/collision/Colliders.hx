@@ -24,6 +24,7 @@ class Collider implements IPlaceable implements IRenderable {
 	
 	public function checkParticleCollision(particles:Array<Particle>):Void {}
 	public function render(graphics : Graphics):Void {}
+	public inline function pointIsInCollider(point:Vector2):Bool {return false;}
 }
 
 class Circle extends Collider {
