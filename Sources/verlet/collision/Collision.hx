@@ -1,9 +1,5 @@
 package verlet.collision;
 
-import verlet.Verlet.Particle;
-//TODO: Make it easy to plug in other frameworks (Kha, OpenFL, etc)
-import kha.math.Vector2;
-import verlet.Verlet.IPlaceable;
 import verlet.Verlet.Composite;
 import verlet.collision.Colliders.Collider;
 

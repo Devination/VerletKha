@@ -1,19 +1,13 @@
 package verlet;
 
-import verlet.Verlet.Particle;
 //TODO: Make it easy to plug in other frameworks (Kha, OpenFL, etc)
-import kha.math.Vector2;
 import kha.Color;
 import kha.graphics2.Graphics;
 import verlet.collision.Collision;
-import verlet.collision.Colliders.Collider;
-import Type.getClass;
 
 #if !noDragger
 import verlet.Verlet.IPlaceable;
 #end
-
-using kha.graphics2.GraphicsExtension;
 
 class Renderer {
 	var world:Verlet = Verlet.Instance;

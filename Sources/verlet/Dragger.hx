@@ -5,12 +5,9 @@ package verlet;
 
 import kha.input.Mouse;
 import kha.math.Vector2;
-import verlet.Verlet.Particle;
-import verlet.Verlet.Composite;
 import verlet.Verlet.IPlaceable;
 import verlet.Constraint.PinConstraint;
 import verlet.collision.Collision;
-import verlet.collision.Colliders.Collider;
 import Type.getClass;
 
 using verlet.Vector2Extensions;
