@@ -24,7 +24,7 @@ class Collider implements IPlaceable implements IRenderable {
 	
 	public function checkParticleCollision(particles:Array<Particle>):Void {}
 	public function render(graphics : Graphics):Void {}
-	public inline function pointIsInCollider(point:Vector2):Bool {return false;}
+	public function isPointInCollider(point:Vector2):Bool {return false;}
 }
 
 class Circle extends Collider {
@@ -34,8 +34,18 @@ class Circle extends Collider {
 		this.radius = radius;
 	}
 	
+	public override inline function isPointInCollider(point:Vector2):Bool {
+		if (point.distanceTo(pos) < radius) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
 	public override function checkParticleCollision(particles:Array<Particle>):Void {
 		for (p in particles) {
+			//Not using isPointInCollider() because we'd have to calculate distance twice if it's a hit
 			var distance = p.pos.distanceTo(pos);
 			if (distance < radius) {
 				var overlap:Float = radius - distance;
@@ -61,12 +71,21 @@ class Box extends Collider {
 		this.height = height;
 	}
 	
+	public override inline function isPointInCollider(point:Vector2):Bool {
+		if (point.x > pos.x && point.x < pos.x + width && // overlap x
+			point.y > pos.y && point.y < pos.y + height) { // overlap y
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
 	public override function checkParticleCollision(particles:Array<Particle>):Void {
 		for (p in particles) {
 			
 			// check if inside box
-			if (p.pos.x > pos.x && p.pos.x < pos.x + width && // overlap x
-				p.pos.y > pos.y && p.pos.y < pos.y + height) { // overlap y
+			if (isPointInCollider(p.pos)) { 
 				
 				// find shortest distance to edge
 				var distances:Array<Float> = [
@@ -95,8 +114,7 @@ class Box extends Collider {
 	}
 }
 
-/** Only works for convex polygons.
-	Verts must be in local space relative to position.
+/** Verts must be in local space relative to position.
 	Polygon is constructed clockwise with normals facing out
 	or counter clockwise for normals facing in */
 class Polygon extends Collider {
@@ -131,10 +149,10 @@ class Polygon extends Collider {
 	public inline function getVertsWorldSpace():Array<Vector2> {
 		return Lambda.array(Lambda.map(verts, function(v) { return v.add(pos); }));
 	}
-	
+
 	public override function checkParticleCollision(particles:Array<Particle>):Void {
 		for (p in particles) {
-			if (containsPoint(p.pos)) {
+			if (isPointInCollider(p.pos)) {
 				var closestDist = Math.POSITIVE_INFINITY;
 				var closestEdge:Edge = null;
 				for (e in edges) {
@@ -160,7 +178,7 @@ class Polygon extends Collider {
 		return false;
 	}
 	
-	public function containsPoint(point:Vector2):Bool {
+	public override function isPointInCollider(point:Vector2):Bool {
 		var vertsWS:Array<Vector2> = getVertsWorldSpace();
 		var j:Int = vertsWS.length - 1;
 		var inside:Bool = false;
