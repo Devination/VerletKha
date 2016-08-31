@@ -28,8 +28,8 @@ class Collider implements IPlaceable implements IRenderable {
 }
 
 class Circle extends Collider {
-	public var radius:Float;
-	public function new(pos:Vector2, radius:Float) { super();
+	public var radius:Int;
+	public function new(pos:Vector2, radius:Int) { super();
 		this.pos = pos;
 		this.radius = radius;
 	}
@@ -63,9 +63,9 @@ class Circle extends Collider {
 }
 
 class Box extends Collider {
-	public var width:Float;
-	public var height:Float;
-	public function new(pos:Vector2, width:Float, height:Float) { super();
+	public var width:Int;
+	public var height:Int;
+	public function new(pos:Vector2, width:Int, height:Int) { super();
 		this.pos = pos;
 		this.width = width;
 		this.height = height;
