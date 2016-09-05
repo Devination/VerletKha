@@ -9,8 +9,7 @@ import verlet.Renderer.IRenderable;
 using kha.graphics2.GraphicsExtension;
 
 class Verlet {
-	public static var Instance(get, null):Verlet;
-	private static function get_Instance(): Verlet { return Instance; }
+	public static var Instance(default, null):Verlet;
 	private var collision:Collision = Collision.Instance;
 	
 	// simulation params
