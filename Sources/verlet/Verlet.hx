@@ -67,7 +67,9 @@ class Verlet {
 			var stepCoef:Float = 1 / step;
 			for (i in 0...step) {
 				for (con in c.constraints) {
-					con.relax(stepCoef);
+					if (con.active) {
+						con.relax(stepCoef);
+					}
 				}
 			}
 		}
@@ -130,9 +132,11 @@ class Composite implements IRenderable{
 		if (drawConstraints) {
 			graphics.color = constraintColor;
 			for (c in constraints) {
-				var points:Array<Vector2> = c.getConstraintPositions();
-				//TODO: Deal with Angle Constraints
-				graphics.drawLine(points[0].x, points[0].y, points[1].x, points[1].y);
+				if (c.active) {
+					var points:Array<Vector2> = c.getConstraintPositions();
+					//TODO: Deal with Angle Constraints
+					graphics.drawLine(points[0].x, points[0].y, points[1].x, points[1].y);
+				}
 			}
 		}
 		

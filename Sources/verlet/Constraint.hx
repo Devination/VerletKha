@@ -5,6 +5,8 @@ import kha.math.Vector2;
 using verlet.Vector2Extensions;
 
 class Constraint {
+	public var active:Bool = true;
+
 	public function new() {}
 	
 	// different Constraints have different relax algorithms
