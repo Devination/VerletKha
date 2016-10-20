@@ -20,8 +20,10 @@ class Verlet {
 	public var composites:Array<Composite> = new Array<Composite>();
 	
 	// Bounds of the Verlet World. Entities will stop here
-	private var width:Int;
-	private var height:Int;
+	// Bounds will extend from pos right by width and down by height
+	private var pos:Vector2;
+	private var width:Float;
+	private var height:Float;
 	private var ceiling:Bool;
 	
 	#if !noDragger
@@ -29,7 +31,8 @@ class Verlet {
 	var dragger:Dragger;
 	#end
 
-	public function new(width:Int, height:Int, ?ceiling:Bool = false) {
+	public function new(width:Float, height:Float, ?ceiling:Bool=false, ?x:Float=0, ?y:Float=0) {
+		pos = new Vector2(x, y);
 		this.width = width;
 		this.height = height;
 		this.ceiling = ceiling;
@@ -50,15 +53,15 @@ class Verlet {
 				p.pos = p.pos.add(gravity).add(vel);
 				
 				// stop at bounds
-				if (p.pos.y > this.height)
-					p.pos.y = this.height;
-				else if (ceiling && p.pos.y < 0)
-					p.pos.y = 0;
+				if (p.pos.y > this.height + this.pos.y)
+					p.pos.y = this.height + this.pos.y;
+				else if (ceiling && p.pos.y < this.pos.y)
+					p.pos.y = this.pos.y;
 				
-				if (p.pos.x < 0)
-					p.pos.x = 0;
-				else if (p.pos.x > this.width)
-					p.pos.x = this.width;
+				if (p.pos.x < this.pos.x)
+					p.pos.x = this.pos.x;
+				else if (p.pos.x > this.width + this.pos.x)
+					p.pos.x = this.width + this.pos.x;
 				
 				collision.checkCollision(c);
 			}
