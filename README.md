@@ -32,4 +32,4 @@ Check out the list on [Trello](https://trello.com/b/Uh63UCJi/verletkha)
 
 License
 -------
-You may use VerletKha under the terms of the MIT License (See [LICENSE](LICENSE)).
+You may use VerletKha under the terms of the MPL 2.0 License (See [LICENSE](LICENSE)). Essentially, you can use commercially, combine with closed-source code, and distribute binaries but any changes made to the VerletKha files must be made open-source.
