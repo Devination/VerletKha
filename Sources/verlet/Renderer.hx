@@ -6,6 +6,7 @@ import kha.graphics2.Graphics;
 import verlet.collision.Collision;
 
 #if !noDragger
+using kha.graphics2.GraphicsExtension;
 import verlet.Verlet.IPlaceable;
 #end
 
