@@ -4,16 +4,20 @@ import verlet.Verlet;
 import kha.math.Vector2;
 
 class Point {
+	public var composite(default, null):Composite;
+	
 	public function new(pos:Vector2) {
-		var composite = new Composite();
+		composite = new Composite();
 		composite.particles.push(new Particle(pos));
 		Verlet.Instance.composites.push(composite);
 	}
 }
 
 class LineSegments {
+	public var composite(default, null):Composite;
+
 	public function new(vertices:Array<Vector2>, stiffness:Float, pinSegments:Array<Int>) {
-		var composite = new Composite();
+		composite = new Composite();
 		for (i in 0...vertices.length) {
 			var p = new Particle(vertices[i]);
 			composite.particles.push(p);
@@ -29,8 +33,10 @@ class LineSegments {
 }
 
 class Cloth {
+	public var composite(default, null):Composite;
+
 	public function new(origin:Vector2, width:Float, height:Float, segments:Int, pinMod:Int, stiffness:Float) {
-		var composite = new Composite();
+		composite = new Composite();
 		var xStride = width / segments;
 		var yStride = height / segments;
 		
