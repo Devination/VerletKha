@@ -28,7 +28,6 @@ class LineSegments {
 				composite.Pin(p, vertices[i]);
 			}
 		}
-		Verlet._instance.composites.push(composite);
 	}
 }
 
@@ -58,8 +57,6 @@ class Cloth {
 			if (x % pinMod == 0)
 				composite.Pin(composite.particles[x], composite.particles[x].pos);
 		}
-		
-		Verlet._instance.composites.push(composite);
 	}
 }
 
@@ -85,7 +82,5 @@ class Tire {
 			composite.constraints.push(new DistanceConstraint(composite.particles[i], center, spokeStiffness));
 			composite.constraints.push(new DistanceConstraint(composite.particles[i], composite.particles[(i + 5) % segments], treadStiffness));
 		}
-		
-		Verlet._instance.composites.push(composite);
 	}
 }

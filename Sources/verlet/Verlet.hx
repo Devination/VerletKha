@@ -12,6 +12,7 @@ class Verlet {
 	/**
 	 * Reference the _instance directly whenever possible.
 	 * Assigning it to another variable can cause issues when swapping out instances.
+	 * See commit [bfacbbb] for more info.
 	 */
 	public static var _instance(default, null):Verlet;
 	
@@ -99,6 +100,7 @@ class Composite implements IRenderable{
 		particles = new Array<Particle>();
 		constraints = new Array<Constraint>();
 		verts = new Array<Vector2>();
+		Verlet._instance.composites.push(this);
 	}
 
 	public function Pin(particle:Particle, pos:Vector2):Constraint	{
