@@ -13,26 +13,22 @@ import Type.getClass;
 using verlet.Vector2Extensions;
 
 class Dragger {
-	
-	var world:Verlet = Verlet.Instance;
-	var collision:Collision = Collision.Instance;
-	
 	// Mouse Dragging Vars
 	public var mouse(default, null) = new Vector2(0,0);
 	public var draggedEntity(default, null):IPlaceable = null;
 	
 	public var selectionRadius = 20;
 	
-	public static var Instance(get, null):Dragger = null;
-	private static function get_Instance():Dragger {
-		if (Instance == null) {
+	public static var _instance(get, null):Dragger = null;
+	private static function get__instance():Dragger {
+		if (_instance == null) {
 			new Dragger();
 		}
-		return Instance;
+		return _instance;
 	}
 	
 	public function new() {
-		Instance = this;
+		_instance = this;
 		Mouse.get().notify(onMouseDown, onMouseUp, onMouseMove, null);
 	}
 	
@@ -43,7 +39,7 @@ class Dragger {
 		var constraintsNearest:Array<Constraint> = [];
 		
 		// find nearest point
-		for (c in world.composites) {
+		for (c in Verlet._instance.composites) {
 			var particles = c.particles;
 			for (p in particles) {
 				var d2 = p.pos.distanceTo(this.mouse);
@@ -65,7 +61,7 @@ class Dragger {
 		
 		// TODO: Allow dragging from anywhere within the the Collider
 		if (entity == null) {
-			for (s in collision.colliders) {
+			for (s in Collision._instance.colliders) {
 				var d2 = s.pos.distanceTo(this.mouse);
 				if (d2 <= this.selectionRadius && d2 < d2Nearest) {
 					entity = s;

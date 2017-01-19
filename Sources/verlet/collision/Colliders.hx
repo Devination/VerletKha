@@ -16,10 +16,9 @@ class Collider implements IPlaceable implements IRenderable {
 	// Make it a force volume with non-1 strength values.
 	// Should be either 1 or super tiny values like 0.0001 
 	public var strength:Float = 1; 
-	var coll = Collision.Instance;
 	
 	public function new() {
-		coll.colliders.push(this);
+		Collision._instance.colliders.push(this);
 	}
 	
 	public function checkParticleCollision(particles:Array<Particle>):Void {}

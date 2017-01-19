@@ -11,30 +11,24 @@ import verlet.Verlet.IPlaceable;
 #end
 
 class Renderer {
-	var world:Verlet = Verlet.Instance;
-	var collision:Collision = Collision.Instance;
-	#if !noDragger
-	var dragger:Dragger = Dragger.Instance;
-	#end
-
-	public static var Instance(get, null):Renderer = null;
-	private static function get_Instance():Renderer {
-		if (Instance == null) {
+	public static var _instance(get, null):Renderer = null;
+	private static function get__instance():Renderer {
+		if (_instance == null) {
 			new Renderer();
 		}
-		return Instance;
+		return _instance;
 	}
 	
 	public function new() {
-		Instance = this;
+		_instance = this;
 	}
 	
 	public function renderAll(graphics : Graphics) {
-		for (composite in world.composites) {
+		for (composite in Verlet._instance.composites) {
 			composite.render(graphics);
 		}
 		
-		for (collider in collision.colliders) {
+		for (collider in Collision._instance.colliders) {
 			collider.render(graphics);
 		}
 		
@@ -43,7 +37,7 @@ class Renderer {
 		
 		#if !noDragger
 		// Highlight the nearest entity within the selection radius
-		var entity:IPlaceable = dragger.nearestEntity();
+		var entity:IPlaceable = Dragger._instance.nearestEntity();
 		if(entity != null) {
 			graphics.drawCircle(entity.pos.x, entity.pos.y, 8);
 		}

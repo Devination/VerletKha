@@ -9,8 +9,11 @@ import verlet.Renderer.IRenderable;
 using kha.graphics2.GraphicsExtension;
 
 class Verlet {
-	public static var Instance(default, null):Verlet;
-	private var collision:Collision = Collision.Instance;
+	/**
+	 * Reference the _instance directly whenever possible.
+	 * Assigning it to another variable can cause issues when swapping out instances.
+	 */
+	public static var _instance(default, null):Verlet;
 	
 	// simulation params
 	public var gravity = new Vector2(0, 0.2);
@@ -26,20 +29,12 @@ class Verlet {
 	private var height:Float;
 	private var ceiling:Bool;
 	
-	#if !noDragger
-	// Handle Dragging
-	var dragger:Dragger;
-	#end
-
 	public function new(width:Float, height:Float, ?ceiling:Bool=false, ?x:Float=0, ?y:Float=0) {
 		pos = new Vector2(x, y);
 		this.width = width;
 		this.height = height;
 		this.ceiling = ceiling;
-		Instance = this;
-		#if !noDragger
-		dragger = Dragger.Instance;
-		#end
+		_instance = this;
 	}
 	
 	public function update(step:Int) {
@@ -63,7 +58,7 @@ class Verlet {
 				else if (p.pos.x > this.width + this.pos.x)
 					p.pos.x = this.width + this.pos.x;
 				
-				collision.checkCollision(c);
+				Collision._instance.checkCollision(c);
 			}
 			
 			// relax constraints
@@ -78,8 +73,8 @@ class Verlet {
 		}
 		#if !noDragger
 		// handle dragging of entities
-		if (dragger.draggedEntity != null)
-			dragger.draggedEntity.pos = dragger.mouse;
+		if (Dragger._instance.draggedEntity != null)
+			Dragger._instance.draggedEntity.pos = Dragger._instance.mouse;
 		#end
 	}
 }

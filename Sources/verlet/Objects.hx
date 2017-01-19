@@ -9,7 +9,7 @@ class Point {
 	public function new(pos:Vector2) {
 		composite = new Composite();
 		composite.particles.push(new Particle(pos));
-		Verlet.Instance.composites.push(composite);
+		Verlet._instance.composites.push(composite);
 	}
 }
 
@@ -28,7 +28,7 @@ class LineSegments {
 				composite.Pin(p, vertices[i]);
 			}
 		}
-		Verlet.Instance.composites.push(composite);
+		Verlet._instance.composites.push(composite);
 	}
 }
 
@@ -59,7 +59,7 @@ class Cloth {
 				composite.Pin(composite.particles[x], composite.particles[x].pos);
 		}
 		
-		Verlet.Instance.composites.push(composite);
+		Verlet._instance.composites.push(composite);
 	}
 }
 
@@ -86,6 +86,6 @@ class Tire {
 			composite.constraints.push(new DistanceConstraint(composite.particles[i], composite.particles[(i + 5) % segments], treadStiffness));
 		}
 		
-		Verlet.Instance.composites.push(composite);
+		Verlet._instance.composites.push(composite);
 	}
 }

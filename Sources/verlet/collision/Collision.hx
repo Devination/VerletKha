@@ -3,21 +3,19 @@ package verlet.collision;
 import verlet.Verlet.Composite;
 import verlet.collision.Colliders.Collider;
 
-class Collision {
-	var world:Verlet = Verlet.Instance;
-	
+class Collision {	
 	public var colliders:Array<Collider> = new Array<Collider>();
 	
-	public static var Instance(get, null):Collision = null;
-	private static function get_Instance():Collision {
-		if (Instance == null) {
+	public static var _instance(get, null):Collision = null;
+	private static function get__instance():Collision {
+		if (_instance == null) {
 			new Collision();
 		}
-		return Instance;
+		return _instance;
 	}
 	
 	public function new() {
-		Instance = this;
+		_instance = this;
 	}
 	
 	public function checkCollision(c:Composite) {
